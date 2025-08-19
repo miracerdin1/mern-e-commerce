@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AuthLayout from "@/components/auth/layout.tsx";
 import AuthLogin from "@/pages/auth/login.tsx";
 import AuthRegister from "@/pages/auth/register.tsx";
@@ -32,10 +32,11 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (isLoading) return <Skeleton className="h-[600px] w-[600px] " />;
+  if (isLoading) return <Skeleton className="h-[600px] w-[600px]" />;
   return (
     <div className="flex flex-col overflow-hidden h-screen w-screen">
       <Routes>
+        <Route path="/" element={<Navigate to="/shop/home" replace />} />
         <Route
           path="/auth"
           element={

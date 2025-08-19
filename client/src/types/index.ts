@@ -1,9 +1,50 @@
-export interface FormControl {
-  name: string; // Name of the form field
-  label: string; // Label displayed for the field
-  placeholder?: string; // Placeholder text in the input field
-  type?: "text" | "email" | "password" | string; // Input type (restricted to valid HTML input types)
-  componentType: "input" | "textarea" | "select"; // Component type
+export interface FormControl<T extends string = string> {
+  name: T;
+  label: string;
+  placeholder?: string;
+  type?:
+    | "email"
+    | "text"
+    | "password"
+    | "number"
+    | "date"
+    | "textarea"
+    | "file"
+    | "select";
+  componentType: "input" | "textarea" | "select";
   id?: number;
-  options?: { value: string; label: string }[];
+  options?: SelectOption[];
 }
+
+export interface EntityModel<Id = any> {
+  id?: Id;
+  state?: number;
+}
+
+export interface SelectOption extends EntityModel {
+  text: string;
+  value: string;
+  label?: string;
+}
+
+export interface BaseFormElement {
+  name: string;
+  label: string;
+  placeholder?: string;
+}
+
+export interface FormElement extends BaseFormElement {
+  componentType: "select" | "input";
+  type:
+    | "text"
+    | "email"
+    | "password"
+    | "number"
+    | "textarea"
+    | "select"
+    | "date"
+    | "file";
+  options?: SelectOption[];
+}
+
+export type AddProductFormElement = FormElement;

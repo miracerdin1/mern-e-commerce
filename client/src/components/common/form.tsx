@@ -11,19 +11,21 @@ import {
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Button } from "@/components/ui/button.tsx";
 
-function CommonForm({
+type CommonFormProps<T extends Record<string, any>> = {
+  formControls: FormControl[];
+  formData: T;
+  setFormData: React.Dispatch<React.SetStateAction<T>>;
+  onSubmit: (e: React.FormEvent) => void;
+  buttonText?: string;
+};
+
+function CommonForm<T extends Record<string, any>>({
   formControls,
   formData,
   setFormData,
   onSubmit,
   buttonText,
-}: {
-  formControls: FormControl[];
-  formData: Record<string, any>;
-  setFormData: (data: Record<string, any>) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  buttonText?: string;
-}) {
+}: CommonFormProps<T>) {
   function renderInputsByComponentType(getControlItem: FormControl) {
     const value = formData[getControlItem.name] || "";
 
@@ -63,7 +65,7 @@ function CommonForm({
               {getControlItem.options && getControlItem.options.length
                 ? getControlItem.options.map((option, index) => (
                     <SelectItem key={index} value={option.value}>
-                      {option.label}
+                      {option.text}
                     </SelectItem>
                   ))
                 : null}
