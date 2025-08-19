@@ -1,15 +1,17 @@
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { ProductImageUploadProps } from "@/pages/admin-view/types";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
+import axios from "axios";
 
 function ProductImageUpload({
   imageFile,
   setImageFile,
   uploadedImageUrl,
   setUploadedImageUrl,
+  setImageLoadingState,
 }: ProductImageUploadProps) {
   const inputRef = useRef(null);
   const handleImageFileChange = (event: Event) => {
@@ -44,9 +46,28 @@ function ProductImageUpload({
   function handleRemoveImage() {
     setImageFile(null);
     if (inputRef.current) {
-      inputRef.current.value = ""; // Clear the input value
+      inputRef.current.value = "";
     }
   }
+
+  async function uploadImageToCloudinary() {
+    setImageLoadingState(true);
+    const data = new FormData();
+    data.append("my_file", imageFile);
+    const response = await axios.post(
+      "http://localhost:3000/api/admin/products/upload-image",
+      data,
+    );
+
+    if (response?.data?.success) {
+      setImageLoadingState(false);
+      setUploadedImageUrl(response.data.result.url);
+    }
+  }
+
+  useEffect(() => {
+    if (imageFile) uploadImageToCloudinary();
+  }, [imageFile]);
 
   return (
     <div className="w-full max-w-md mx-auto mt-4">
@@ -94,4 +115,5 @@ function ProductImageUpload({
     </div>
   );
 }
+
 export default ProductImageUpload;

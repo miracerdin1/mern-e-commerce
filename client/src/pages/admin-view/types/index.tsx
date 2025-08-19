@@ -3,4 +3,5 @@ export interface ProductImageUploadProps {
   setImageFile: React.Dispatch<React.SetStateAction<File | null>>;
   uploadedImageUrl: string;
   setUploadedImageUrl: (url: string) => void;
+  setImageLoadingState: (value: boolean) => void;
 }

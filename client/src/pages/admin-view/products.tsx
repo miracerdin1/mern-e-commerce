@@ -39,6 +39,7 @@ function AdminProducts() {
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [imageLoadingState, setImageLoadingState] = useState(false);
 
   const onSubmit = (data: any) => {
     console.log("Form Data Submitted:", data);
@@ -71,6 +72,7 @@ function AdminProducts() {
             setImageFile={setImageFile}
             uploadedImageUrl={uploadedImageUrl}
             setUploadedImageUrl={setUploadedImageUrl}
+            setImageLoadingState={setImageLoadingState}
           />
           <div className="py-6">
             {openCreateProductsDialog && (

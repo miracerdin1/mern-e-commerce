@@ -4,6 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth/auth-routes";
 
+import adminProductsRouter from "./routes/admin/products-routes";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -22,6 +24,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/api/auth', authRouter);
+app.use("/api/admin/products", adminProductsRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
