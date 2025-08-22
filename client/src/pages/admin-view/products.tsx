@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import {
   Sheet,
@@ -10,6 +10,10 @@ import {
 import CommonForm from "@/components/common/form.tsx";
 import { addProductFormElements } from "@/config";
 import ProductImageUpload from "@/components/admin-view/image-upload.tsx";
+import { ProductFormData } from "@/pages/admin-view/types";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllProduct } from "@/store/admin/products-slice";
+import { AppDispatch, RootState } from "@/store/store.ts";
 
 const initialFormData: ProductFormData = {
   image: null,
@@ -22,17 +26,6 @@ const initialFormData: ProductFormData = {
   category: "",
 };
 
-type ProductFormData = {
-  image: null;
-  name: string;
-  description: string;
-  brand: string;
-  price: number;
-  salePrice: number;
-  totalStock: number;
-  category: string;
-};
-
 function AdminProducts() {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] =
     useState(false);
@@ -40,13 +33,20 @@ function AdminProducts() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoadingState, setImageLoadingState] = useState(false);
+  const { productList } = useSelector(
+    (state: RootState) => state.adminProducts,
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
-  const onSubmit = (data: any) => {
-    console.log("Form Data Submitted:", data);
+  function onSubmit(event: Event) {
+    event.preventDefault();
+  }
 
-    setOpenCreateProductsDialog(false);
-    setFormData(initialFormData);
-  };
+  useEffect(() => {
+    dispatch(fetchAllProduct());
+  }, [dispatch]);
+
+  console.log("producList", productList);
 
   return (
     <Fragment>
@@ -73,6 +73,7 @@ function AdminProducts() {
             uploadedImageUrl={uploadedImageUrl}
             setUploadedImageUrl={setUploadedImageUrl}
             setImageLoadingState={setImageLoadingState}
+            imageLoadingState={imageLoadingState}
           />
           <div className="py-6">
             {openCreateProductsDialog && (
