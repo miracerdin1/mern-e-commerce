@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {IProduct} from "./i-product";
+import {IProduct} from "shared/src/IProduct";
 
 const ProductSchema = new mongoose.Schema<IProduct>({
     image: String,
