@@ -4,11 +4,13 @@ export interface ProductImageUploadProps {
   uploadedImageUrl: string;
   setUploadedImageUrl: (url: string) => void;
   setImageLoadingState: (value: boolean) => void;
+  imageLoadingState: boolean;
+  isEditMode: boolean;
 }
 
 export type ProductFormData = {
   image: null;
-  name: string;
+  title: string;
   description: string;
   brand: string;
   price: number;

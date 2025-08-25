@@ -17,6 +17,7 @@ type CommonFormProps<T extends Record<string, any>> = {
   setFormData: React.Dispatch<React.SetStateAction<T>>;
   onSubmit: (e: React.FormEvent) => void;
   buttonText?: string;
+  isBtnDisabled: boolean;
 };
 
 function CommonForm<T extends Record<string, any>>({
@@ -25,6 +26,7 @@ function CommonForm<T extends Record<string, any>>({
   setFormData,
   onSubmit,
   buttonText,
+  isBtnDisabled,
 }: CommonFormProps<T>) {
   function renderInputsByComponentType(getControlItem: FormControl) {
     const value = formData[getControlItem.name] || "";
@@ -95,6 +97,7 @@ function CommonForm<T extends Record<string, any>>({
         );
     }
   }
+
   return (
     <form onSubmit={onSubmit}>
       <div className="flex flex-col gap-3">
@@ -108,7 +111,7 @@ function CommonForm<T extends Record<string, any>>({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-2 w-full">
+      <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
         {buttonText || "Submit"}
       </Button>
     </form>

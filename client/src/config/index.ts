@@ -72,9 +72,9 @@ export const adminSidebarMenuItems: MenuItem[] = [
 
 export const addProductFormElements: AddProductFormElement[] = [
   {
-    name: "name",
-    label: "Product Name",
-    placeholder: "Enter product name",
+    name: "title",
+    label: "Product Title",
+    placeholder: "Enter product title",
     type: "text",
     componentType: "input",
   },
@@ -113,13 +113,6 @@ export const addProductFormElements: AddProductFormElement[] = [
         value: "footwear",
       },
     ],
-  },
-  {
-    name: "image",
-    label: "Image",
-    placeholder: "Upload product image",
-    type: "file",
-    componentType: "input",
   },
   {
     name: "brand",

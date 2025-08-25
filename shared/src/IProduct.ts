@@ -1,4 +1,5 @@
-export interface IProduct extends EntityModel {
+export interface IProduct {
+    _id: string | number;
     image: string;
     title: string;
     description: string;
