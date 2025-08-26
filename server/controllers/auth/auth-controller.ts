@@ -1,19 +1,19 @@
 import bcrypt from "bcryptjs";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {NextFunction, Request, Response} from "express";
-import { User } from "../../models/User";
+import {User} from "../../models/User";
 
 // Register User
 export const registerUser = async (
     req: Request,
     res: Response
 ): Promise<void> => {
-    const { userName, email, password } = req.body;
+    const {userName, email, password} = req.body;
 
     try {
-        const checkUser = await User.findOne({ email });
+        const checkUser = await User.findOne({email});
         if (checkUser) {
-            res.json({ success: false, message: "User already exists" });
+            res.json({success: false, message: "User already exists"});
             return;
         }
 
@@ -39,13 +39,12 @@ export const registerUser = async (
 };
 
 
-
 // Login User
 export const login = async (req: Request, res: Response): Promise<void> => {
-    const { email, password } = req.body;
+    const {email, password} = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({email});
 
         if (!user) {
             res.json({
@@ -66,22 +65,25 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         }
 
         const token = jwt.sign(
-            { userId: user._id,
+            {
+                userId: user._id,
                 role: user.role,
-                email: user.role }, "CLIENT_SECRET_KEY", {
+                email: user.role,
+                userName: user.userName
+            },
+            "CLIENT_SECRET_KEY", {
                 expiresIn: process.env.JWT_EXPIRES_IN || "1h"
             },
-
-
         );
 
-        res.cookie("token", token, { httpOnly: true , secure: false}).json({
+        res.cookie("token", token, {httpOnly: true, secure: false}).json({
             success: true,
             message: "Login successful",
             user: {
                 email: user.email,
                 role: user.role,
-                id: user._id
+                id: user._id,
+                userName: user.userName
 
             }, // Include token in response
         });
@@ -112,7 +114,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const token = req.cookies.token;
 
     if (!token) {
-        res.status(401).json({ success: false, message: "Unauthorized" }); // ❌ return yok
+        res.status(401).json({success: false, message: "Unauthorized"}); // ❌ return yok
         return;
     }
 
@@ -121,7 +123,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         req.user = decoded as JwtPayload;
         next();
     } catch (error) {
-        res.status(401).json({ success: false, message: "Invalid token" }); // ❌ return yok
+        res.status(401).json({success: false, message: "Invalid token"}); // ❌ return yok
     }
 };
 
