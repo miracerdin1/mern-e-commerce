@@ -2,27 +2,28 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { EditProductPayload } from "@/store/admin/edit-product-payload.interface.ts";
 import { ProductFormData } from "@/pages/admin-view/products.tsx";
+import { AddProductResponse } from "shared/src/AddProductResponse.ts";
 
 const initialState = {
   productList: [],
   isLoading: false,
 };
 
-export const addNewProduct = createAsyncThunk(
-  "/products/addnewproduct",
-  async (formData) => {
-    const result = await axios.post(
-      "http://localhost:3000/api/admin/products/add",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+export const addNewProduct = createAsyncThunk<
+  AddProductResponse,
+  ProductFormData
+>("/products/addnewproduct", async (formData) => {
+  const result = await axios.post(
+    "http://localhost:3000/api/admin/products/add",
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
-    return result.data;
-  },
-);
+    },
+  );
+  return result.data;
+});
 
 export const fetchAllProduct = createAsyncThunk(
   "/products/fetchAllProduct",
@@ -34,23 +35,23 @@ export const fetchAllProduct = createAsyncThunk(
   },
 );
 
-export const editProduct = createAsyncThunk<string, EditProductPayload>(
-  "/products/editProduct",
-  async ({ id, formData }) => {
-    const result = await axios.put(
-      `http://localhost:3000/api/admin/products/edit/${id}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+export const editProduct = createAsyncThunk<
+  AddProductResponse,
+  EditProductPayload
+>("/products/editProduct", async ({ id, formData }) => {
+  const result = await axios.put(
+    `http://localhost:3000/api/admin/products/edit/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
-    return result.data;
-  },
-);
+    },
+  );
+  return result.data;
+});
 
-export const deleteProduct = createAsyncThunk<string>(
+export const deleteProduct = createAsyncThunk<boolean, string>(
   "/products/deleteProduct",
   async (id) => {
     const result = await axios.delete(

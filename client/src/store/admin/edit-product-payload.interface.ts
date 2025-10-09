@@ -1,6 +1,6 @@
 import { EntityModel } from "@/types";
-import { ProductFormData } from "@/pages/admin-view/products.tsx";
+import { IProduct } from "shared/src/IProduct.ts";
 
 export interface EditProductPayload extends EntityModel {
-  formData: ProductFormData;
+  formData: IProduct;
 }

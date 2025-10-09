@@ -111,7 +111,11 @@ function CommonForm<T extends Record<string, any>>({
           </div>
         ))}
       </div>
-      <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
+      <Button
+        disabled={isBtnDisabled}
+        type="submit"
+        className="mt-2 w-full bg-black text-white hover:bg-gray-800"
+      >
         {buttonText || "Submit"}
       </Button>
     </form>
