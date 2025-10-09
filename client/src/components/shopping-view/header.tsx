@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
 
 function MenuItems() {
@@ -52,7 +52,7 @@ function HeaderRightContent() {
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Avatar className="bg-black">
+          <Avatar className="w-10 h-10">
             <AvatarFallback className="bg-black text-white font-extrabold">
               {user?.userName ? user.userName[0].toUpperCase() : "U"}
             </AvatarFallback>

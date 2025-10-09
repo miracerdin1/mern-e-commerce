@@ -21,6 +21,7 @@ import {
 import { AppDispatch, RootState } from "@/store/store.ts";
 import { useToast } from "@/hooks/use-toast.ts";
 import AdminProductTile from "@/pages/admin-view/product-tile.tsx";
+import { IProduct } from "shared/src/IProduct.ts";
 
 const initialFormData: ProductFormData = {
   image: null,
@@ -121,8 +122,9 @@ function AdminProducts() {
       </div>
       <div className="grid gap-4 md:grdi-cols-3 lg:grid-cols-4">
         {productList && productList.length > 0
-          ? productList.map((productItem) => (
+          ? productList.map((productItem: IProduct) => (
               <AdminProductTile
+                key={productItem._id}
                 setFormData={setFormData}
                 setCurrentEditedId={setCurrentEditedId}
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}

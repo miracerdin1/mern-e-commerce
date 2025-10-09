@@ -8,4 +8,6 @@ export interface IProduct {
     price: number;
     salePrice: number;
     totalStock: number;
+    createdAt?: string;
+    updatedAt?: string;
 }
