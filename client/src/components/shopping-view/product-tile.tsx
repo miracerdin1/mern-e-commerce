@@ -4,10 +4,16 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
 
-function ShoppingProductTile({ product }: { product: IProduct }) {
+function ShoppingProductTile({
+  product,
+  handleGetProductDetails,
+}: {
+  product: IProduct;
+  handleGetProductDetails: any;
+}) {
   return (
     <Card className="w-full max-w-sm mx-auto">
-      <div>
+      <div onClick={() => handleGetProductDetails(product?._id)}>
         <div className="relative">
           <img
             src={product?.image}

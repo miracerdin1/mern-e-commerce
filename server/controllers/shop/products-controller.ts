@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 
 import Product from '../../models/Product';
 
-const getFilteredProducts = async (req: Request, res: Response) => {
+export const getFilteredProducts = async (req: Request, res: Response): Promise<void> => {
     try {
         const category = Array.isArray(req.query.category)
             ? req.query.category.join(",")
@@ -53,4 +53,24 @@ const getFilteredProducts = async (req: Request, res: Response) => {
     }
 };
 
-export default getFilteredProducts;
+export const getProductDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const {id} = req.params;
+        const product = await Product.findById(id);
+
+        if (!product) {
+            res.status(404).json({success: false, message: 'Product not found'})
+            return;
+        }
+        ;
+
+        res.status(200).json({
+            success: true,
+            data: product,
+        });
+
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json({success: false, message: 'Error fetching products',});
+    }
+}

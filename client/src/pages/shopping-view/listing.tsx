@@ -11,10 +11,14 @@ import { ArrowUpDownIcon } from "lucide-react";
 import { sortOptions } from "@/config";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/products-slice";
 import { AppDispatch } from "@/store/store.ts";
 import ShoppingProductTile from "@/components/shopping-view/product-tile.tsx";
 import { useSearchParams } from "react-router-dom";
+import { ProductDetailsDialog } from "@/components/shopping-view/product-details.tsx";
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
@@ -31,10 +35,13 @@ function createSearchParamsHelper(filterParams) {
 
 function ShoppingListing() {
   const dispatch = useDispatch<AppDispatch>();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts,
+  );
   const [filters, setFilters] = useState({});
   const [sortBy, setSortBy] = useState("");
   const [searcParams, setSearchParams] = useSearchParams();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   function handleSort(value: string) {
     setSortBy(value);
@@ -69,6 +76,11 @@ function ShoppingListing() {
     console.log("filters", filters);
   }
 
+  function handleGetProductDetails(getCurrentProductId: string) {
+    console.log("getProductDetails", getCurrentProductId);
+    dispatch(fetchProductDetails(getCurrentProductId));
+  }
+
   useEffect(() => {
     if (filters && !!Object.keys(filters).length) {
       const createQueryString = createSearchParamsHelper(filters);
@@ -98,7 +110,11 @@ function ShoppingListing() {
       );
   }, [dispatch, sortBy, filters]);
 
-  console.log("productList", productList);
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
+
+  console.log("productDetails", productDetails);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -141,6 +157,7 @@ function ShoppingListing() {
           {productList?.length
             ? productList.map((product, index) => (
                 <ShoppingProductTile
+                  handleGetProductDetails={handleGetProductDetails}
                   key={`${product.name}-${index}`}
                   product={product}
                 />
@@ -148,6 +165,11 @@ function ShoppingListing() {
             : null}
         </div>
       </div>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 }
