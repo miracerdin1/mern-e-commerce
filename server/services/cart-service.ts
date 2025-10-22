@@ -15,14 +15,11 @@ export class CartService {
      * @returns Promise resolving to the cart
      */
     static async findOrCreateCart(userId: string): Promise<ICart> {
-        let cart = await Cart.findOne({ userId }).lean();
+        let cart = await Cart.findOne({ userId });
         if (!cart) {
             cart = new Cart({ userId, items: [] });
-        } else {
-            // Convert lean document back to mongoose document for operations
-            cart = new Cart(cart);
         }
-        return cart;
+        return cart as ICart;
     }
 
     static async verifyProductExists(productId: string): Promise<void> {
@@ -66,7 +63,7 @@ export class CartService {
 
         await cart.save();
         await cart.populate(CART_POPULATION_CONFIG);
-        return cart;
+        return cart as ICart;
     }
 
     static async updateCartItemQuantity(userId: string, productId: string, quantity: number): Promise<ICart | null> {
@@ -81,7 +78,7 @@ export class CartService {
         cart.items[itemIndex].quantity = quantity;
         await cart.save();
         await cart.populate(CART_POPULATION_CONFIG);
-        return cart;
+        return cart as ICart;
     }
 
     static async removeCartItem(userId: string, productId: string): Promise<ICart | null> {
@@ -97,7 +94,7 @@ export class CartService {
 
         await cart.save();
         await cart.populate(CART_POPULATION_CONFIG);
-        return cart;
+        return cart as ICart;
     }
 
     static async getCartWithValidItems(userId: string): Promise<ICart | null> {
@@ -111,6 +108,6 @@ export class CartService {
             await cart.save();
         }
 
-        return cart;
+        return cart as ICart;
     }
 }

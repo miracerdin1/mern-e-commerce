@@ -1,32 +1,22 @@
 import { Response } from 'express';
-import { CartError, NotFoundError, ValidationError } from 'shared/src/error-types';
-
-export interface ErrorResponse {
-    success: false;
-    message: string;
-    code?: string;
-    errors?: Array<{
-        field?: string;
-        message: string;
-        code?: string;
-    }>;
-}
+import { CartError, ValidationError, NotFoundError } from 'shared/src/error-types';
+import { HTTP_STATUS } from '../constants/http-status';
 
 export const handleError = (error: any, res: Response, defaultMessage: string): void => {
-    console.error('Operation error:', error);
+    console.error('Error:', error);
 
     if (error instanceof ValidationError) {
-        res.status(400).json({
+        res.status(HTTP_STATUS.BAD_REQUEST).json({
             success: false,
             message: error.message,
-            code: error.code,
-            errors: error.field ? [{ field: error.field, message: error.message }] : undefined
+            field: error.field,
+            code: error.code
         });
         return;
     }
 
     if (error instanceof NotFoundError) {
-        res.status(404).json({
+        res.status(HTTP_STATUS.NOT_FOUND).json({
             success: false,
             message: error.message,
             code: error.code
@@ -43,10 +33,9 @@ export const handleError = (error: any, res: Response, defaultMessage: string): 
         return;
     }
 
-    // Generic error
-    res.status(500).json({
+    // Default error response
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
         success: false,
-        message: defaultMessage,
-        code: 'INTERNAL_ERROR'
+        message: defaultMessage
     });
 };
