@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { EditProductPayload } from "@/store/admin/edit-product-payload.interface.ts";
-import { ProductFormData } from "@/pages/admin-view/products.tsx";
+import { ProductFormData } from "@/pages/admin-view/types";
 import { AddProductResponse } from "shared/src/AddProductResponse.ts";
+import { IProduct } from "shared/src/IProduct.ts";
+import { API_ENDPOINTS } from "@/config/api";
 
-const initialState = {
+const initialState: { productList: IProduct[]; isLoading: boolean } = {
   productList: [],
   isLoading: false,
 };
@@ -14,7 +16,7 @@ export const addNewProduct = createAsyncThunk<
   ProductFormData
 >("/products/addnewproduct", async (formData) => {
   const result = await axios.post(
-    "http://localhost:3000/api/admin/products/add",
+    API_ENDPOINTS.ADMIN.PRODUCTS.ADD,
     formData,
     {
       headers: {
@@ -28,9 +30,7 @@ export const addNewProduct = createAsyncThunk<
 export const fetchAllProduct = createAsyncThunk(
   "/products/fetchAllProduct",
   async () => {
-    const result = await axios.get(
-      "http://localhost:3000/api/admin/products/get",
-    );
+    const result = await axios.get(API_ENDPOINTS.ADMIN.PRODUCTS.GET);
     return result.data;
   },
 );
@@ -40,7 +40,7 @@ export const editProduct = createAsyncThunk<
   EditProductPayload
 >("/products/editProduct", async ({ id, formData }) => {
   const result = await axios.put(
-    `http://localhost:3000/api/admin/products/edit/${id}`,
+    API_ENDPOINTS.ADMIN.PRODUCTS.EDIT(id),
     formData,
     {
       headers: {
@@ -54,9 +54,7 @@ export const editProduct = createAsyncThunk<
 export const deleteProduct = createAsyncThunk<boolean, string>(
   "/products/deleteProduct",
   async (id) => {
-    const result = await axios.delete(
-      `http://localhost:3000/api/admin/products/delete/${id}`,
-    );
+    const result = await axios.delete(API_ENDPOINTS.ADMIN.PRODUCTS.DELETE(id));
     return result.data;
   },
 );

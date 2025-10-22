@@ -1,12 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { ProductFormData } from "@/pages/admin-view/types";
+import { IProduct } from "shared/src/IProduct.ts";
 
 interface FetchProductsPayload {
   filterParams: Record<string, any>;
   sortParams: string;
 }
 
-const initialState = {
+interface ProductState {
+  productList: IProduct[];
+  isLoading: boolean;
+  productDetails: ProductFormData | null;
+}
+
+const initialState: ProductState = {
   productList: [],
   isLoading: false,
   productDetails: null,

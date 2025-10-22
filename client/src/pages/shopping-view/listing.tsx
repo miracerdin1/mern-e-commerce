@@ -15,7 +15,7 @@ import {
   fetchAllFilteredProducts,
   fetchProductDetails,
 } from "@/store/shop/products-slice";
-import { AppDispatch } from "@/store/store.ts";
+import { AppDispatch, RootState } from "@/store/store.ts";
 import ShoppingProductTile from "@/components/shopping-view/product-tile.tsx";
 import { useSearchParams } from "react-router-dom";
 import { ProductDetailsDialog } from "@/components/shopping-view/product-details.tsx";
@@ -36,11 +36,11 @@ function createSearchParamsHelper(filterParams) {
 function ShoppingListing() {
   const dispatch = useDispatch<AppDispatch>();
   const { productList, productDetails } = useSelector(
-    (state) => state.shopProducts,
+    (state: RootState) => state.shopProducts,
   );
   const [filters, setFilters] = useState({});
   const [sortBy, setSortBy] = useState("");
-  const [searcParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   function handleSort(value: string) {
@@ -158,7 +158,7 @@ function ShoppingListing() {
             ? productList.map((product, index) => (
                 <ShoppingProductTile
                   handleGetProductDetails={handleGetProductDetails}
-                  key={`${product.name}-${index}`}
+                  key={`${product.title}-${index}`}
                   product={product}
                 />
               ))
