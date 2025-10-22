@@ -6,6 +6,7 @@ import authRouter from "./routes/auth/auth-routes";
 
 import adminProductsRouter from "./routes/admin/products-routes";
 import shopProductsRouter from "./routes/shop/products-routes";
+import shopCartRouter from "./routes/shop/cart-routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
+app.use("/api/shop/cart", shopCartRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

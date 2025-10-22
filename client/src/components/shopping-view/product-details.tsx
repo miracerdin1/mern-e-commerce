@@ -4,8 +4,17 @@ import { Separator } from "@/components/ui/separator.tsx";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
 import { StarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
+import { ProductFormData } from "@/pages/admin-view/types";
 
-function ProductDetailsDialog({ open, setOpen, productDetails }) {
+function ProductDetailsDialog({
+  open,
+  setOpen,
+  productDetails,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  productDetails: ProductFormData | null;
+}) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] lg:max-w-[70vw]">
