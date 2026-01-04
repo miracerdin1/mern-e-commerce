@@ -1,12 +1,13 @@
-import { IProduct } from "shared/src/IProduct.ts";
-import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
+import { IProduct } from "shared/src/IProduct.ts";
 
 function ShoppingProductTile({
   product,
   handleGetProductDetails,
+  handleAddToCart,
 }: {
   product: IProduct;
   handleGetProductDetails: any;
@@ -53,10 +54,15 @@ function ShoppingProductTile({
             ) : null}
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full">Add to Card</Button>
-        </CardFooter>
       </div>
+      <CardFooter>
+        <Button
+          onClick={() => handleAddToCart(product?._id)}
+          className="w-full"
+        >
+          Add to Card
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

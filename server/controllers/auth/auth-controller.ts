@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+﻿import bcrypt from "bcryptjs";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../../models/User";
@@ -51,7 +51,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
                 success: false,
                 message: "User not found"
             });
-            return; // ✅ erken çık
+            return; 
         }
 
 
@@ -61,19 +61,20 @@ export const login = async (req: Request, res: Response): Promise<void> => {
                 success: false,
                 message: "Incorrect password"
             });
-            return; // ✅ yine erken çık
+            return; 
         }
 
         const token = jwt.sign(
             {
-                userId: user._id,
+                userId: user._id.toString(),
                 role: user.role,
-                email: user.role,
+                email: user.email,
                 userName: user.userName
             },
-            "CLIENT_SECRET_KEY", {
-                expiresIn: process.env.JWT_EXPIRES_IN || "1h"
-            },
+            "CLIENT_SECRET_KEY",
+            {
+                expiresIn: "1h"
+            }
         );
 
         res.cookie("token", token, {httpOnly: true, secure: false}).json({
@@ -85,17 +86,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
                 id: user._id,
                 userName: user.userName
 
-            }, // Include token in response
+            },
         });
 
-        // Send response directly without returning it
-        // res.json({
-        //     success: true,
-        //     message: "Login successful",
-        //     token,
-        // });
     } catch (error) {
-        // Send response directly without returning it
         res.status(500).json({
             success: false,
             message: "Error logging in"
@@ -114,7 +108,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const token = req.cookies.token;
 
     if (!token) {
-        res.status(401).json({success: false, message: "Unauthorized"}); // ❌ return yok
+        res.status(401).json({success: false, message: "Unauthorized"});
         return;
     }
 
@@ -123,7 +117,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         req.user = decoded as JwtPayload;
         next();
     } catch (error) {
-        res.status(401).json({success: false, message: "Invalid token"}); // ❌ return yok
+        res.status(401).json({success: false, message: "Invalid token"});
     }
 };
 

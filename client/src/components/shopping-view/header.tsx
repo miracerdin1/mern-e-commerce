@@ -1,11 +1,5 @@
-import { Link } from "react-router-dom";
-import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet.tsx";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button.tsx";
-import { AppDispatch, RootState } from "@/store/store.ts";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { shoppingViewHeaderMenuItems } from "@/config";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +8,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet.tsx";
+import { shoppingViewHeaderMenuItems } from "@/config";
 import { logoutUser } from "@/store/auth-slice";
+import { fetchCartItems } from "@/store/shop/cart-slice";
+import { AppDispatch, RootState } from "@/store/store.ts";
+import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import UserCartWrapper from "./cart-wrapper";
 
 function MenuItems() {
   return (
@@ -35,21 +37,38 @@ function MenuItems() {
 
 function HeaderRightContent() {
   const { user } = useSelector((state: RootState) => state.auth);
+  const { cartItems } = useSelector((state: RootState) => state.shopCart);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [openCartSheet, setOpenCartSheet] = useState(false);
 
   function handleLogout() {
     dispatch(logoutUser());
   }
 
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchCartItems({ userId: user.id }));
+    }
+  }, [dispatch, user]);
+
   console.log("user", user);
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-      <Button variant="outline" size="icon">
-        <ShoppingCart className="h-6 w-6" />
-        <span className="sr-only">User cart</span>
-      </Button>
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setOpenCartSheet(true)}
+        >
+          <ShoppingCart className="h-6 w-6" />
+          <span className="sr-only">User cart</span>
+        </Button>
+        <UserCartWrapper
+          cartItems={cartItems && cartItems.length > 0 ? cartItems : []}
+        />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="w-10 h-10">
@@ -78,7 +97,7 @@ function HeaderRightContent() {
 
 function ShoppingHeader() {
   const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth,
+    (state: RootState) => state.auth
   );
 
   return (

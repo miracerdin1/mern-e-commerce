@@ -1,4 +1,6 @@
-import ProductFilter from "@/pages/shopping-view/filter.tsx";
+import { ProductDetailsDialog } from "@/components/shopping-view/product-details.tsx";
+import ShoppingProductTile from "@/components/shopping-view/product-tile.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,19 +8,19 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { ArrowUpDownIcon } from "lucide-react";
 import { sortOptions } from "@/config";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
+import ProductFilter from "@/pages/shopping-view/filter.tsx";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import {
   fetchAllFilteredProducts,
   fetchProductDetails,
 } from "@/store/shop/products-slice";
 import { AppDispatch, RootState } from "@/store/store.ts";
-import ShoppingProductTile from "@/components/shopping-view/product-tile.tsx";
+import { ArrowUpDownIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { ProductDetailsDialog } from "@/components/shopping-view/product-details.tsx";
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
@@ -36,12 +38,14 @@ function createSearchParamsHelper(filterParams) {
 function ShoppingListing() {
   const dispatch = useDispatch<AppDispatch>();
   const { productList, productDetails } = useSelector(
-    (state: RootState) => state.shopProducts,
+    (state: RootState) => state.shopProducts
   );
+  const { user } = useSelector((state: RootState) => state.auth);
   const [filters, setFilters] = useState({});
   const [sortBy, setSortBy] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const { toast } = useToast();
 
   function handleSort(value: string) {
     setSortBy(value);
@@ -51,7 +55,7 @@ function ShoppingListing() {
     console.log(
       "getSectionId, getCurrentOption",
       getSectionId,
-      getCurrentOption,
+      getCurrentOption
     );
     let copyFilters: any = { ...filters };
     const indexOfCurrentOption = Object.keys(copyFilters).indexOf(getSectionId);
@@ -81,6 +85,29 @@ function ShoppingListing() {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
+  function handleAddToCart(getCurrentProductId: string) {
+    if (!user?.id) {
+      console.error("User not logged in");
+      return;
+    }
+
+    dispatch(
+      addToCart({
+        userId: user.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems({ userId: user.id }));
+        toast({
+          title: "Success",
+          description: "Product added to cart",
+        });
+      }
+    });
+  }
+
   useEffect(() => {
     if (filters && !!Object.keys(filters).length) {
       const createQueryString = createSearchParamsHelper(filters);
@@ -106,15 +133,13 @@ function ShoppingListing() {
   useEffect(() => {
     if (filters !== null && sortBy !== null)
       dispatch(
-        fetchAllFilteredProducts({ filterParams: filters, sortParams: sortBy }),
+        fetchAllFilteredProducts({ filterParams: filters, sortParams: sortBy })
       );
   }, [dispatch, sortBy, filters]);
 
   useEffect(() => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
-
-  console.log("productDetails", productDetails);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -158,6 +183,7 @@ function ShoppingListing() {
             ? productList.map((product, index) => (
                 <ShoppingProductTile
                   handleGetProductDetails={handleGetProductDetails}
+                  handleAddToCart={handleAddToCart}
                   key={`${product.title}-${index}`}
                   product={product}
                 />

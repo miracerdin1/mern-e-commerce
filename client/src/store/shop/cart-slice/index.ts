@@ -100,7 +100,7 @@ const shoppingCartSlice = createSlice({
       .addCase(addToCart.fulfilled, (state, action) => {
         state.isLoading = false;
         state.lastUpdated = Date.now();
-        if (action.payload.success && action.payload.data?.items) {
+        if (action.payload.success && action.payload.data) {
           state.cartItems = action.payload.data.items;
         }
       })

@@ -1,7 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = {
+interface User {
+  id: string;
+  email: string;
+  userName: string;
+  role: string;
+}
+
+interface AuthState {
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  user: User | null;
+  token: string | null;
+}
+
+const initialState: AuthState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
@@ -16,10 +30,10 @@ export const registerUser = createAsyncThunk(
       formData,
       {
         withCredentials: true,
-      },
+      }
     );
     return response.data;
-  },
+  }
 );
 
 export const loginUser = createAsyncThunk(
@@ -30,10 +44,10 @@ export const loginUser = createAsyncThunk(
       formData,
       {
         withCredentials: true,
-      },
+      }
     );
     return response.data;
-  },
+  }
 );
 
 export const logoutUser = createAsyncThunk("/auth/logout", async () => {
@@ -42,7 +56,7 @@ export const logoutUser = createAsyncThunk("/auth/logout", async () => {
     {},
     {
       withCredentials: true,
-    },
+    }
   );
   return response.data;
 });
@@ -56,7 +70,7 @@ export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
         "Cache-Control":
           "no-cache, no-store, must-revalidate, proxy-revalidate",
       },
-    },
+    }
   );
   return response.data;
 });
