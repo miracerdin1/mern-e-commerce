@@ -97,15 +97,25 @@ function ShoppingListing() {
         productId: getCurrentProductId,
         quantity: 1,
       })
-    ).then((data) => {
-      if (data?.payload?.success) {
-        dispatch(fetchCartItems({ userId: user.id }));
+    )
+      .unwrap()
+      .then((data) => {
+        if (data?.success) {
+          dispatch(fetchCartItems({ userId: user.id }));
+          toast({
+            title: "Success",
+            description: "Product added to cart",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to add to cart:", error);
         toast({
-          title: "Success",
-          description: "Product added to cart",
+          title: "Error",
+          description: "Failed to add product to cart",
+          variant: "destructive",
         });
-      }
-    });
+      });
   }
 
   useEffect(() => {

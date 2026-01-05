@@ -1,10 +1,15 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Separator } from "@/components/ui/separator.tsx";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar.tsx";
-import { StarIcon } from "lucide-react";
+import { Button } from "@/components/ui/button.tsx";
+import { Dialog, DialogContent } from "@/components/ui/dialog.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
+import { useToast } from "@/hooks/use-toast";
 import { ProductFormData } from "@/pages/admin-view/types";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { setProductDetails } from "@/store/shop/products-slice";
+import { AppDispatch, RootState } from "@/store/store.ts";
+import { StarIcon } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 
 function ProductDetailsDialog({
   open,
@@ -15,8 +20,50 @@ function ProductDetailsDialog({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   productDetails: ProductFormData | null;
 }) {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const { toast } = useToast();
+
+  function handleAddToCart(getCurrentProductId: string) {
+    if (!user?.id) {
+      console.error("User not logged in");
+      return;
+    }
+
+    dispatch(
+      addToCart({
+        userId: user.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    )
+      .unwrap()
+      .then((data) => {
+        if (data?.success) {
+          dispatch(fetchCartItems({ userId: user.id }));
+          toast({
+            title: "Success",
+            description: "Product added to cart",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to add to cart:", error);
+        toast({
+          title: "Error",
+          description: "Failed to add product to cart",
+          variant: "destructive",
+        });
+      });
+  }
+
+  function handleDialogClose() {
+    setOpen(false);
+    dispatch(setProductDetails());
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] lg:max-w-[70vw]">
         <div className="relative overflow-hidden rounded-lg">
           <img
@@ -57,7 +104,12 @@ function ProductDetailsDialog({
             <span className="text-muted-forground">(4.5)</span>
           </div>
           <div className="mt-5 mb-5 ">
-            <Button className="w-full">Add to Cart</Button>
+            <Button
+              onClick={() => handleAddToCart(productDetails?._id ?? "")}
+              className="w-full"
+            >
+              Add to Cart
+            </Button>
           </div>
           <Separator />
           <div className="max-h-[300px] overflow-auto">
