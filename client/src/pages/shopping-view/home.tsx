@@ -30,12 +30,13 @@ import bannerThree from "../../assets/banner-3.webp";
 function ShoppingHome() {
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch<AppDispatch>();
-  const { productList } = useSelector((state: RootState) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state: RootState) => state.shopProducts
+  );
 
   const navigate = useNavigate();
   const { toast } = useToast();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const [productDetails, setProductDetails] = useState(null);
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const slides = [
@@ -73,17 +74,24 @@ function ShoppingHome() {
   }
 
   function handleAddtoCart(getCurrentProductId: string) {
+    if (!user?.id) {
+      toast({
+        title: "Please login to add items to cart",
+        variant: "destructive",
+      });
+      return;
+    }
     dispatch(
       addToCart({
-        userId: user?.id,
+        userId: user.id,
         productId: getCurrentProductId,
         quantity: 1,
       })
     )
       .unwrap()
       .then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
+        if (data?.success) {
+          dispatch(fetchCartItems({ userId: user.id }));
           toast({
             title: "Product is added to cart",
           });
@@ -233,7 +241,7 @@ function ShoppingHome() {
               productList.map((product) => (
                 <ShoppingProductTile
                   handleGetProductDetails={handleGetProductDetails}
-                  handleAddtoCart={handleAddtoCart}
+                  handleAddToCart={handleAddtoCart}
                   key={product._id}
                   product={product}
                 />
