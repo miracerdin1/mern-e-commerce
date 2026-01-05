@@ -1,30 +1,31 @@
-import "./App.css";
-import { Navigate, Route, Routes } from "react-router-dom";
+import AdminLayout from "@/components/admin-view/layout.tsx";
 import AuthLayout from "@/components/auth/layout.tsx";
+import CheckAuth from "@/components/common/check-auth.tsx";
+import ShoppingLayout from "@/components/shopping-view/layout.tsx";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Toaster } from "@/components/ui/toaster";
+import AdminDashboard from "@/pages/admin-view/dashboard.tsx";
+import AdminFeatures from "@/pages/admin-view/features.tsx";
+import AdminOrders from "@/pages/admin-view/orders.tsx";
+import AdminProducts from "@/pages/admin-view/products.tsx";
 import AuthLogin from "@/pages/auth/login.tsx";
 import AuthRegister from "@/pages/auth/register.tsx";
-import AdminLayout from "@/components/admin-view/layout.tsx";
-import AdminDashboard from "@/pages/admin-view/dashboard.tsx";
-import AdminProducts from "@/pages/admin-view/products.tsx";
-import AdminOrders from "@/pages/admin-view/orders.tsx";
-import AdminFeatures from "@/pages/admin-view/features.tsx";
-import ShoppingLayout from "@/components/shopping-view/layout.tsx";
 import NotFound from "@/pages/not-found";
-import ShoppingHome from "@/pages/shopping-view/home.tsx";
 import ShoppingAccount from "@/pages/shopping-view/account.tsx";
-import ShoppingListing from "@/pages/shopping-view/listing.tsx";
 import ShoppingCheckout from "@/pages/shopping-view/checkout.tsx";
-import CheckAuth from "@/components/common/check-auth.tsx";
+import ShoppingHome from "@/pages/shopping-view/home.tsx";
+import ShoppingListing from "@/pages/shopping-view/listing.tsx";
 import UnauthPage from "@/pages/unauth-page";
-import { useDispatch, useSelector } from "react-redux";
+import { checkAuth } from "@/store/auth-slice";
 import { AppDispatch, RootState } from "@/store/store.ts";
 import { useEffect } from "react";
-import { checkAuth } from "@/store/auth-slice";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
 
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(
-    (state: RootState) => state.auth,
+    (state: RootState) => state.auth
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -34,7 +35,7 @@ function App() {
 
   if (isLoading) return <Skeleton className="h-[600px] w-[600px]" />;
   return (
-    <div className="flex flex-col overflow-hidden h-screen w-screen">
+    <div className="flex flex-col min-h-screen w-full">
       <Routes>
         <Route path="/" element={<Navigate to="/shop/home" replace />} />
         <Route
@@ -77,6 +78,7 @@ function App() {
         <Route path="*" element={<NotFound />}></Route>
         <Route path="/unauth-page" element={<UnauthPage />}></Route>
       </Routes>
+      <Toaster />
     </div>
   );
 }
