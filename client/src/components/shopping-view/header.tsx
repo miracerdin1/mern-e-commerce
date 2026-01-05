@@ -13,6 +13,7 @@ import { shoppingViewHeaderMenuItems } from "@/config";
 import { logoutUser } from "@/store/auth-slice";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { AppDispatch, RootState } from "@/store/store.ts";
+import { Label } from "@radix-ui/react-dropdown-menu";
 import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,16 +21,34 @@ import { Link, useNavigate } from "react-router-dom";
 import UserCartWrapper from "./cart-wrapper";
 
 function MenuItems() {
+  const navigate = useNavigate();
+
+  function handleNavigate(getCurrentMenuItem: {
+    id: string;
+    label: string;
+    path: string;
+  }) {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      getCurrentMenuItem.id !== "home"
+        ? {
+            category: [getCurrentMenuItem.id],
+          }
+        : null;
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(getCurrentMenuItem.path);
+  }
+
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
-          className="text-sm font-medium"
+        <Label
+          onClick={() => handleNavigate(menuItem)}
+          className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
-          to={menuItem.path}
         >
           {menuItem.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
@@ -67,6 +86,7 @@ function HeaderRightContent() {
         </Button>
         <UserCartWrapper
           cartItems={cartItems && cartItems.length > 0 ? cartItems : []}
+          setOpenCartSheet={setOpenCartSheet}
         />
       </Sheet>
       <DropdownMenu>
@@ -101,8 +121,8 @@ function ShoppingHeader() {
   );
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="flex h-16 items-center justify-between px-4 md:px-6">
+    <header className="bg-white shadow-lg">
+      <div className="flex items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
           <House className="h-6 w-6" />
           <span className="font-bold">Ecommerce</span>
