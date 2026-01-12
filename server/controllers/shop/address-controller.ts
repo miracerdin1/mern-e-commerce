@@ -4,7 +4,7 @@ import Address from "../../models/Address";
 const addAddress = async (req: Request, res: Response) => {
   try {
     const { userId, address, city, pinCode, phone, notes } = req.body;
-    console.log("addAddress req.body:", req.body);
+
     if (!userId || !address || !city || !pinCode || !phone) {
       return res
         .status(400)

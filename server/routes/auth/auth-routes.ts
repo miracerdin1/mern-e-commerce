@@ -12,16 +12,11 @@ router.post("/register", registerUser); // This route is linked to registerUser 
 router.post("/login", login); // This route is linked to login controller
 router.post("/logout", logoutUser);
 router.get("/check-auth", authMiddleware, (req: Request, res) => {
-  const user = req.user as any;
+  const user = req.user;
   res.status(200).json({
     success: true,
     message: "Authenticated user",
-    user: {
-      id: user?.userId,
-      email: user?.email,
-      role: user?.role,
-      userName: user?.userName,
-    },
+    user,
   });
 });
 

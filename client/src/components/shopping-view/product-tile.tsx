@@ -11,6 +11,7 @@ function ShoppingProductTile({
 }: {
   product: IProduct;
   handleGetProductDetails: any;
+  handleAddToCart: (productId: string | number) => void;
 }) {
   return (
     <Card className="w-full max-w-sm mx-auto">
