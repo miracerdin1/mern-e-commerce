@@ -6,6 +6,7 @@ import authRouter from "./routes/auth/auth-routes";
 
 import adminProductsRouter from "./routes/admin/products-routes";
 import commonFeatureRouter from "./routes/common/feature-routes";
+import shopAddressRouter from "./routes/shop/address-routes";
 import shopCartRouter from "./routes/shop/cart-routes";
 import shopProductsRouter from "./routes/shop/products-routes";
 
@@ -45,6 +46,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
+app.use("/api/shop/address", shopAddressRouter);
 app.use("/api/common/feature", commonFeatureRouter);
 
 app.listen(PORT, () => {

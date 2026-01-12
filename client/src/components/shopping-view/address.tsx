@@ -1,6 +1,11 @@
 import { addressFormControls } from "@/config";
 import { toast } from "@/hooks/use-toast";
-import { deleteAddress, fetchAllAddresses } from "@/store/shop/address-slice";
+import {
+  addNewAddress,
+  deleteAddress,
+  editAddress,
+  fetchAllAddresses,
+} from "@/store/shop/address-slice";
 import { AppDispatch } from "@/store/store";
 import { AddressFormData } from "@/types/address-form-data.interface";
 import { useEffect, useState } from "react";
@@ -31,6 +36,7 @@ function Address() {
 
   function handleManageAddress(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     if (addressList.length >= 3 && currentEditedId === null) {
       setFormData(initialFormData);
       toast({
@@ -38,6 +44,40 @@ function Address() {
         variant: "destructive",
       });
       return;
+    }
+
+    if (currentEditedId !== null) {
+      dispatch(
+        editAddress({
+          userId: user?.userId || user?.id || user?._id,
+          addressId: currentEditedId,
+          formData,
+        })
+      ).then((data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchAllAddresses(user?.userId || user?.id || user?._id));
+          setCurrentEditedId(null);
+          setFormData(initialFormData);
+          toast({
+            title: "Address updated successfully",
+          });
+        }
+      });
+    } else {
+      dispatch(
+        addNewAddress({
+          ...formData,
+          userId: user?.userId || user?.id || user?._id,
+        })
+      ).then((data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchAllAddresses(user?.userId || user?.id || user?._id));
+          setFormData(initialFormData);
+          toast({
+            title: "Address added successfully",
+          });
+        }
+      });
     }
   }
 

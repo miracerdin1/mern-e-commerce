@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Address from "../../models/Adress";
+import Address from "../../models/Address";
 
 const addAddress = async (req: Request, res: Response) => {
   try {
