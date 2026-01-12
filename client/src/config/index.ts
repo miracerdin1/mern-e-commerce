@@ -1,9 +1,9 @@
 import { AddProductFormElement, FormControl as FromControl } from "@/types";
-import { LayoutDashboard, ListOrdered, ShoppingBasket } from "lucide-react";
 import {
   FilterOption,
   FilterOptions,
 } from "@/types/filter-options.interface.ts";
+import { LayoutDashboard, ListOrdered, ShoppingBasket } from "lucide-react";
 
 type MenuItem = {
   id: string;
@@ -228,4 +228,41 @@ export const sortOptions: FilterOption[] = [
   { id: "price-hightolow", label: "Price: High to Low" },
   { id: "title-atoz", label: "Title: A to Z" },
   { id: "title-ztoa", label: "Title: Z to A" },
+];
+
+export const addressFormControls = [
+  {
+    label: "Address",
+    name: "address",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your address",
+  },
+  {
+    label: "City",
+    name: "city",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your city",
+  },
+  {
+    label: "Pincode",
+    name: "pinCode",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your pincode",
+  },
+  {
+    label: "Phone",
+    name: "phone",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your phone number",
+  },
+  {
+    label: "Notes",
+    name: "notes",
+    componentType: "textarea",
+    placeholder: "Enter any additional notes",
+  },
 ];
