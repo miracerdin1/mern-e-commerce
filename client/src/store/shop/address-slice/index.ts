@@ -6,7 +6,7 @@ const initialState = {
   isLoading: false,
 };
 
-const addNewAddress = createAsyncThunk(
+export const addNewAddress = createAsyncThunk(
   "address/addNewAddress",
   async (formData: any) => {
     const response = await axios.post(
@@ -17,7 +17,7 @@ const addNewAddress = createAsyncThunk(
   }
 );
 
-const fetchAllAddresses = createAsyncThunk(
+export const fetchAllAddresses = createAsyncThunk(
   "address/fetchAllAddresses",
   async (userId: string) => {
     const response = await axios.get(
@@ -27,7 +27,7 @@ const fetchAllAddresses = createAsyncThunk(
   }
 );
 
-const editAddress = createAsyncThunk(
+export const editAddress = createAsyncThunk(
   "address/editAddress",
   async ({
     userId,
@@ -40,13 +40,13 @@ const editAddress = createAsyncThunk(
   }) => {
     const response = await axios.put(
       `http://localhost:3000/api/shop/address/edit/${userId}/${addressId}`,
-      formData
+      { formData }
     );
     return response.data;
   }
 );
 
-const deleteAddress = createAsyncThunk(
+export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
   async ({ userId, addressId }: { userId: string; addressId: string }) => {
     const response = await axios.delete(
@@ -67,7 +67,7 @@ const addressSlice = createSlice({
     });
     builder.addCase(addNewAddress.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.addressList = action.payload;
+      state.addressList = action.payload.data;
     });
     builder.addCase(addNewAddress.rejected, (state) => {
       state.isLoading = false;
@@ -79,7 +79,7 @@ const addressSlice = createSlice({
     });
     builder.addCase(fetchAllAddresses.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.addressList = action.payload;
+      state.addressList = action.payload.data;
     });
     builder.addCase(fetchAllAddresses.rejected, (state) => {
       state.isLoading = false;
@@ -91,7 +91,7 @@ const addressSlice = createSlice({
     });
     builder.addCase(editAddress.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.addressList = action.payload;
+      state.addressList = action.payload.data;
     });
     builder.addCase(editAddress.rejected, (state) => {
       state.isLoading = false;
@@ -103,7 +103,7 @@ const addressSlice = createSlice({
     });
     builder.addCase(deleteAddress.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.addressList = action.payload;
+      state.addressList = action.payload.data;
     });
     builder.addCase(deleteAddress.rejected, (state) => {
       state.isLoading = false;

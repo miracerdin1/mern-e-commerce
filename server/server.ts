@@ -36,6 +36,12 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  console.log("Body:", req.body);
+  next();
+});
+
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
