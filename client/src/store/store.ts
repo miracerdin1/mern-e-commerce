@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import AdminProductsSlice from "./admin/products-slice";
 import shopAddressSlice from "./shop/address-slice";
 import shopCartSlice from "./shop/cart-slice";
+import shopOrderSlice from "./shop/order-slice";
 import ShopProductSlice from "./shop/products-slice";
 
 const store = configureStore({
@@ -12,6 +13,7 @@ const store = configureStore({
     shopProducts: ShopProductSlice,
     shopCart: shopCartSlice,
     shopAddress: shopAddressSlice,
+    shopOrder: shopOrderSlice,
   },
 });
 

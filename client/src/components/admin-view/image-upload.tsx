@@ -1,11 +1,11 @@
-import { Label } from "@/components/ui/label.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { ProductImageUploadProps } from "@/pages/admin-view/types";
-import { useEffect, useRef } from "react";
-import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
-import axios from "axios";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { ProductImageUploadProps } from "@/pages/admin-view/types";
+import axios from "axios";
+import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 function ProductImageUpload({
   imageFile,

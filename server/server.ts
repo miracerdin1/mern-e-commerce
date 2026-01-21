@@ -8,6 +8,7 @@ import adminProductsRouter from "./routes/admin/products-routes";
 import commonFeatureRouter from "./routes/common/feature-routes";
 import shopAddressRouter from "./routes/shop/address-routes";
 import shopCartRouter from "./routes/shop/cart-routes";
+import shopOrderRouter from "./routes/shop/order-routes";
 import shopProductsRouter from "./routes/shop/products-routes";
 
 const app = express();
@@ -30,23 +31,18 @@ app.use(
       "Pragma",
     ],
     credentials: true,
-  })
+  }),
 );
 
 app.use(cookieParser());
 app.use(express.json());
-
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log("Body:", req.body);
-  next();
-});
 
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
 app.use("/api/shop/address", shopAddressRouter);
+app.use("/api/shop/order", shopOrderRouter);
 app.use("/api/common/feature", commonFeatureRouter);
 
 app.listen(PORT, () => {
