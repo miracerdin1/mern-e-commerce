@@ -22,14 +22,19 @@ const initialFormData: AddressFormData = {
   notes: "",
 };
 
-function Address() {
+interface AddressProps {
+  selectedId?: string | null;
+  setCurrentSelectedAddress?: (address: any) => void;
+}
+
+function Address({ selectedId, setCurrentSelectedAddress }: AddressProps) {
   const [formData, setFormData] = useState<AddressFormData>(initialFormData);
   const [currentEditedId, setCurrentEditedId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: any) => state.auth);
   const addressList = useSelector(
-    (state: any) => state.shopAddress.addressList
+    (state: any) => state.shopAddress.addressList,
   );
 
   console.log("addressList", addressList);
@@ -52,7 +57,7 @@ function Address() {
           userId: user?.userId || user?.id || user?._id,
           addressId: currentEditedId,
           formData,
-        })
+        }),
       ).then((data) => {
         if (data?.payload?.success) {
           dispatch(fetchAllAddresses(user?.userId || user?.id || user?._id));
@@ -68,7 +73,7 @@ function Address() {
         addNewAddress({
           ...formData,
           userId: user?.userId || user?.id || user?._id,
-        })
+        }),
       ).then((data) => {
         if (data?.payload?.success) {
           dispatch(fetchAllAddresses(user?.userId || user?.id || user?._id));
@@ -88,7 +93,7 @@ function Address() {
       deleteAddress({
         userId: user?.userId || user?.id || user?._id,
         addressId: getCurrentAddress._id || "",
-      })
+      }),
     ).then((data) => {
       console.log("data", data);
       if (data?.payload?.success) {
@@ -120,7 +125,7 @@ function Address() {
       .map((key) =>
         key !== "notes"
           ? formData[key as keyof AddressFormData].trim() !== ""
-          : true
+          : true,
       )
       .every((item) => item);
   }
@@ -132,7 +137,7 @@ function Address() {
 
   return (
     <Card>
-      <div className="m-b-5 p-3 grid- grid-col-1 sm:grid-col-2 md:grid-col-3">
+      <div className="m-b-5 p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
         {addressList && addressList.length > 0
           ? addressList?.map((address: any) => (
               <AddressCard
@@ -140,6 +145,8 @@ function Address() {
                 handleEdit={handleEdit}
                 key={address._id}
                 addressInfo={address}
+                isSelected={selectedId === address._id}
+                onSelect={setCurrentSelectedAddress}
               />
             ))
           : null}

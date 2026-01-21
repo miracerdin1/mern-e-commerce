@@ -15,6 +15,8 @@ import ShoppingAccount from "@/pages/shopping-view/account.tsx";
 import ShoppingCheckout from "@/pages/shopping-view/checkout.tsx";
 import ShoppingHome from "@/pages/shopping-view/home.tsx";
 import ShoppingListing from "@/pages/shopping-view/listing.tsx";
+import MockPayment from "@/pages/shopping-view/mock-payment.tsx";
+import PaymentSuccess from "@/pages/shopping-view/payment-success.tsx";
 import UnauthPage from "@/pages/unauth-page";
 import { checkAuth } from "@/store/auth-slice";
 import { AppDispatch, RootState } from "@/store/store.ts";
@@ -25,7 +27,7 @@ import "./App.css";
 
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -73,6 +75,8 @@ function App() {
           <Route path="home" element={<ShoppingHome />}></Route>
           <Route path="listing" element={<ShoppingListing />}></Route>
           <Route path="checkout" element={<ShoppingCheckout />}></Route>
+          <Route path="mock-payment" element={<MockPayment />}></Route>
+          <Route path="payment-success" element={<PaymentSuccess />}></Route>
           <Route path="account" element={<ShoppingAccount />}></Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>
