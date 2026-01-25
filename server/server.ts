@@ -14,14 +14,18 @@ import shopProductsRouter from "./routes/shop/products-routes";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const MONGO_URI =
+  process.env.MONGO_URI ||
+  "mongodb+srv://miracerdin:mirac@cluster0.q8qesc8.mongodb.net/";
+
 mongoose
-  .connect("mongodb+srv://miracerdin:mirac@cluster0.q8qesc8.mongodb.net/")
+  .connect(MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error(err));
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
