@@ -1,5 +1,4 @@
-import { CART_VALIDATION } from "shared/src/cart-types";
-import { NotFoundError, ValidationError } from "shared/src/error-types";
+import { CART_VALIDATION, NotFoundError, ValidationError } from "shared";
 import { CART_POPULATION_CONFIG } from "../helpers/cart-helpers";
 import Cart from "../models/Cart";
 import Product from "../models/Product";
@@ -32,7 +31,7 @@ export class CartService {
   static async addItemToCart(
     userId: string,
     productId: string,
-    quantity: number
+    quantity: number,
   ): Promise<ICart> {
     // Validate inputs
     if (
@@ -41,7 +40,7 @@ export class CartService {
     ) {
       throw new ValidationError(
         `Quantity must be between ${CART_VALIDATION.MIN_QUANTITY} and ${CART_VALIDATION.MAX_QUANTITY}`,
-        "quantity"
+        "quantity",
       );
     }
 
@@ -52,7 +51,7 @@ export class CartService {
     ]);
 
     const existingItemIndex = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
+      (item) => item.productId.toString() === productId,
     );
 
     if (existingItemIndex > -1) {
@@ -60,7 +59,7 @@ export class CartService {
       if (newQuantity > CART_VALIDATION.MAX_TOTAL_QUANTITY) {
         throw new ValidationError(
           `Total quantity cannot exceed ${CART_VALIDATION.MAX_TOTAL_QUANTITY}`,
-          "quantity"
+          "quantity",
         );
       }
       cart.items[existingItemIndex].quantity = newQuantity;
@@ -76,13 +75,13 @@ export class CartService {
   static async updateCartItemQuantity(
     userId: string,
     productId: string,
-    quantity: number
+    quantity: number,
   ): Promise<ICart | null> {
     const cart = await Cart.findOne({ userId });
     if (!cart) return null;
 
     const itemIndex = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
+      (item) => item.productId.toString() === productId,
     );
     if (itemIndex === -1) return null;
 
@@ -94,14 +93,14 @@ export class CartService {
 
   static async removeCartItem(
     userId: string,
-    productId: string
+    productId: string,
   ): Promise<ICart | null> {
     const cart = await Cart.findOne({ userId });
     if (!cart) return null;
 
     const initialLength = cart.items.length;
     cart.items = cart.items.filter(
-      (item) => item.productId.toString() !== productId
+      (item) => item.productId.toString() !== productId,
     );
 
     if (cart.items.length === initialLength) return null;
@@ -113,7 +112,7 @@ export class CartService {
 
   static async getCartWithValidItems(userId: string): Promise<ICart | null> {
     const cart = await Cart.findOne({ userId }).populate(
-      CART_POPULATION_CONFIG
+      CART_POPULATION_CONFIG,
     );
     if (!cart) return null;
 

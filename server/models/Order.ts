@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IOrder } from "shared/src/IOrder";
+import { IOrder } from "shared";
 
 const OrderSchema = new mongoose.Schema<IOrder>({
   userId: String,
