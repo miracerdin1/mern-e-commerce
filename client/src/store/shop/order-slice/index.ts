@@ -1,3 +1,4 @@
+import API_BASE_URL from "@/config/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -68,7 +69,7 @@ export const createNewOrder = createAsyncThunk(
   "order/createNewOrder",
   async (orderData: CreateOrderPayload) => {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/order/create",
+      `${API_BASE_URL}/api/shop/order/create`,
       orderData,
     );
     return response.data;
@@ -79,7 +80,7 @@ export const capturePayment = createAsyncThunk(
   "order/capturePayment",
   async (paymentData: CapturePaymentPayload) => {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/order/capture",
+      `${API_BASE_URL}/api/shop/order/capture`,
       paymentData,
     );
     return response.data;
@@ -90,7 +91,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "order/getAllOrdersByUserId",
   async (userId: string) => {
     const response = await axios.get(
-      `http://localhost:3000/api/shop/order/list/${userId}`,
+      `${API_BASE_URL}/api/shop/order/list/${userId}`,
     );
     return response.data;
   },
@@ -100,7 +101,7 @@ export const getOrderDetails = createAsyncThunk(
   "order/getOrderDetails",
   async (orderId: string) => {
     const response = await axios.get(
-      `http://localhost:3000/api/shop/order/details/${orderId}`,
+      `${API_BASE_URL}/api/shop/order/details/${orderId}`,
     );
     return response.data;
   },

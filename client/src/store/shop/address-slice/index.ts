@@ -1,3 +1,4 @@
+import API_BASE_URL from "@/config/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -10,21 +11,21 @@ export const addNewAddress = createAsyncThunk(
   "address/addNewAddress",
   async (formData: any) => {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/address/add",
-      formData
+      `${API_BASE_URL}/api/shop/address/add`,
+      formData,
     );
     return response.data;
-  }
+  },
 );
 
 export const fetchAllAddresses = createAsyncThunk(
   "address/fetchAllAddresses",
   async (userId: string) => {
     const response = await axios.get(
-      `http://localhost:3000/api/shop/address/get/${userId}`
+      `${API_BASE_URL}/api/shop/address/get/${userId}`,
     );
     return response.data;
-  }
+  },
 );
 
 export const editAddress = createAsyncThunk(
@@ -39,21 +40,21 @@ export const editAddress = createAsyncThunk(
     formData: any;
   }) => {
     const response = await axios.put(
-      `http://localhost:3000/api/shop/address/edit/${userId}/${addressId}`,
-      { formData }
+      `${API_BASE_URL}/api/shop/address/edit/${userId}/${addressId}`,
+      { formData },
     );
     return response.data;
-  }
+  },
 );
 
 export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
   async ({ userId, addressId }: { userId: string; addressId: string }) => {
     const response = await axios.delete(
-      `http://localhost:3000/api/shop/address/delete/${userId}/${addressId}`
+      `${API_BASE_URL}/api/shop/address/delete/${userId}/${addressId}`,
     );
     return response.data;
-  }
+  },
 );
 
 const addressSlice = createSlice({

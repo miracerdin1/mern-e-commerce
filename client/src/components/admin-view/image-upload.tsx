@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import API_BASE_URL from "@/config/api";
 import { ProductImageUploadProps } from "@/pages/admin-view/types";
 import axios from "axios";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
@@ -56,7 +57,7 @@ function ProductImageUpload({
     const data = new FormData();
     data.append("my_file", imageFile);
     const response = await axios.post(
-      "http://localhost:3000/api/admin/products/upload-image",
+      `${API_BASE_URL}/api/admin/products/upload-image`,
       data,
     );
 
