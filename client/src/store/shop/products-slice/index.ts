@@ -1,3 +1,4 @@
+import API_BASE_URL from "@/config/api";
 import { ProductFormData } from "@/pages/admin-view/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -26,7 +27,7 @@ export const fetchAllFilteredProducts = createAsyncThunk<
 >("/products/fetchAllProducts", async ({ filterParams, sortParams }) => {
   const query = new URLSearchParams({ ...filterParams, sortBy: sortParams });
   const result = await axios.get(
-    `http://localhost:3000/api/shop/products/get?${query}`
+    `${API_BASE_URL}/api/shop/products/get?${query}`,
   );
   return result.data;
 });
@@ -35,9 +36,7 @@ export const fetchProductDetails = createAsyncThunk<
   any, // ✅ Dönen veri tipi (örneğin IProduct)
   string // ✅ Parametre tipi (id)
 >("/products/fetchProductDetails", async (id) => {
-  const result = await axios.get(
-    `http://localhost:3000/api/shop/products/get/${id}`
-  );
+  const result = await axios.get(`${API_BASE_URL}/api/shop/products/get/${id}`);
   return result.data;
 });
 
