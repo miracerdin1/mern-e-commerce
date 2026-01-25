@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
-import {IProduct} from "shared/src/IProduct";
+import { IProduct } from "shared";
 
-const ProductSchema = new mongoose.Schema<IProduct>({
+const ProductSchema = new mongoose.Schema<IProduct>(
+  {
     image: String,
     title: String,
     description: String,
@@ -10,10 +11,11 @@ const ProductSchema = new mongoose.Schema<IProduct>({
     price: Number,
     salePrice: Number,
     totalStock: Number,
-
-}, {
+  },
+  {
     timestamps: true,
     versionKey: false,
-})
+  },
+);
 
 export default mongoose.model<IProduct>("Product", ProductSchema);

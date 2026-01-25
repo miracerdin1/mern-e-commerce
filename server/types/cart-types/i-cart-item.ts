@@ -1,6 +1,6 @@
-import {IProduct} from "shared/src/IProduct";
+import { IProduct } from "shared";
 
 export interface ICartItem {
-    productId: IProduct;
-    quantity: number;
+  productId: IProduct;
+  quantity: number;
 }
