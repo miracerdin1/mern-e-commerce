@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CART_VALIDATION } from "shared/src/cart-types";
+import { CART_VALIDATION } from "shared";
 import { HTTP_STATUS } from "../constants/http-status";
 
 const isValidMongoId = (id: string): boolean => {
